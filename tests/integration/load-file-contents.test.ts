@@ -46,11 +46,11 @@ describe("loadFileContents integration", () => {
 	});
 
 	it("returns both sides of a changed file in full", async () => {
-		vi.spyOn(extractor, "fetchAndExtract").mockImplementation(async (url: string) =>
-			url.includes("1.0.0")
-				? tree(entry("src/index.js", "const a = 1;\n"))
-				: tree(entry("src/index.js", "const a = 2;\n")),
-		);
+		vi.when(vi.spyOn(extractor, "fetchAndExtract"), { onUnmatched: "throw" })
+			.calledWith("https://example.test/pkg-changed-1.0.0.tgz", "tgz")
+			.thenResolve(tree(entry("src/index.js", "const a = 1;\n")))
+			.calledWith("https://example.test/pkg-changed-2.0.0.tgz", "tgz")
+			.thenResolve(tree(entry("src/index.js", "const a = 2;\n")));
 
 		const result = await load("src/index.js", "changed");
 
@@ -58,9 +58,11 @@ describe("loadFileContents integration", () => {
 	});
 
 	it("returns an empty side for files that only exist in one version", async () => {
-		vi.spyOn(extractor, "fetchAndExtract").mockImplementation(async (url: string) =>
-			url.includes("1.0.0") ? tree() : tree(entry("added.js", "new\n")),
-		);
+		vi.when(vi.spyOn(extractor, "fetchAndExtract"), { onUnmatched: "throw" })
+			.calledWith("https://example.test/pkg-added-1.0.0.tgz", "tgz")
+			.thenResolve(tree())
+			.calledWith("https://example.test/pkg-added-2.0.0.tgz", "tgz")
+			.thenResolve(tree(entry("added.js", "new\n")));
 
 		const result = await load("added.js", "added");
 
