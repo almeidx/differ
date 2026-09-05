@@ -45,7 +45,7 @@
 	let instance = $state<FileDiffInstance | null>(null);
 	let appliedKey: string | null = null;
 
-	const options = $derived<FileDiffOptions<undefined>>({
+	const options = $derived<FileDiffOptions<undefined, undefined>>({
 		diffStyle: $viewMode,
 		disableFileHeader: true,
 		overflow: $wordWrap ? 'wrap' : 'scroll',

@@ -19,7 +19,7 @@
 		"test:smoke": "svelte-kit sync && playwright test"
 	},
 	"dependencies": {
-		"@pierre/diffs": "^1.3.6",
+		"@pierre/diffs": "^1.4.0",
 		"@pierre/trees": "^1.0.0-beta.6",
 		"@zag-js/combobox": "^1.43.3",
 		"@zag-js/radio-group": "^1.43.3",
